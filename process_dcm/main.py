@@ -9,7 +9,8 @@ import typer
 
 from process_dcm import __version__
 from process_dcm.const import RESERVED_CSV
-from process_dcm.utils import delete_if_empty, process_and_save_csv, process_dcm
+from process_dcm.utils import (delete_if_empty, process_and_save_csv,
+                               process_dcm)
 
 # Filter the specific pydicom warning
 warnings.filterwarnings(
@@ -62,6 +63,22 @@ def main(
         "--keep",
         help="Keep the specified fields (p: patient_key, n: names, d: date_of_birth, D: year-only DOB, g: gender)",
     ),
+    preserve_folder_structure: bool = typer.Option(
+        True,
+        "--preserve_folder_structure/--no_preserve_folder_structure",
+        "-p",
+        help="Preserve folder structure in the output directory.",
+    ),
+    keep_dcm_name_as_folder: bool = typer.Option(
+        True,
+        "--keep_dcm_name_as_folder/--no_keep_dcm_name_as_folder",
+        help="Store extracted files in a folder named the same as the DCM.",
+    ),
+    relative_source_file: bool = typer.Option(
+        False,
+        "--relative_source_file/--no_relative_source_file",
+        help="Preserve folder structure in the output directory.",
+    ),
     overwrite: bool = typer.Option(False, "-w", "--overwrite", help="Overwrite existing images if found."),
     reset: bool = typer.Option(False, "-r", "--reset", help="Reset the output directory if it exists."),
     quiet: bool = typer.Option(False, "-q", "--quiet", help="Silence verbosity."),
@@ -103,6 +120,10 @@ def main(
             if dcm_folder.is_dir():
                 shutil.rmtree(dcm_folder)
 
+    # if group and preserve_folder_structure:
+    #     typer.secho("'--group' and '--preserve_folder_structure' are mutually excluding options", fg=typer.colors.BRIGHT_YELLOW)
+    #     raise typer.Abort()
+
     tol = TOL if tol is None else tol
 
     processed, skipped, results = process_dcm(
@@ -116,6 +137,9 @@ def main(
         time_group=group,
         tol=tol,
         n_jobs=n_jobs,
+        preserve_folder_structure=preserve_folder_structure,
+        keep_dcm_name_as_folder=keep_dcm_name_as_folder,
+        relative_source_file=relative_source_file,
     )
 
     total = processed + skipped

@@ -40,6 +40,8 @@ pip install process-dcm
 │                                        patient_id is anonymised, a 'study_2_patient.csv' file will be generated.          │
 │ --keep                -k      TEXT     Keep the specified fields (p: patient_key, n: names, d: date_of_birth, D:          │
 │                                        year-only DOB, g: gender)                                                          │
+│ --preserve_folder_structure / --no_preserve_folder_structure                                                              │
+│                               BOOL     Preserve folder structure in the output directory. [default: True]                 │
 │ --overwrite           -w               Overwrite existing images if found.                                                │
 │ --reset               -r               Reset the output directory if it exists.                                           │
 │ --quiet               -q               Silence verbosity.                                                                 │

@@ -77,6 +77,8 @@ class ImageModality(Enum):
     )
 
     OPTOS_FA = ("OPTOS_FA", "Optos Ultra-Widefield FA", ModalityFlag.IS_2D_IMAGE | ModalityFlag.IS_INTERIOR)
+    OPTOS_AF_IR = ("OPTOS_AF_IR", "Optos Ultra-Widefield AF - Infrared", ModalityFlag.IS_2D_IMAGE | ModalityFlag.IS_INTERIOR)
+    OPTOS_ICGA = ("OPTOS_ICGA", "Optos Ultra-Widefield ICGA", ModalityFlag.IS_2D_IMAGE | ModalityFlag.IS_INTERIOR)
 
     UNKNOWN_ULTRAWIDEFIELD = (
         "OUWF",
@@ -87,6 +89,8 @@ class ImageModality(Enum):
     # VF-related modalities
     FDF = ("FDF", "Flicker Defined Form Perimetry")
     SAP = ("SAP", "Standard Automated Perimetry")
+
+    MP_IR = ('MP_IR', 'Microperimetry - Infrared', ModalityFlag.IS_2D_IMAGE)
 
     # Values which are not real images or may contain sensitive data.
     # Librarian will want to ignore these

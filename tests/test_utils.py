@@ -11,21 +11,11 @@ from pydicom.dataset import FileDataset
 from pytest_mock import MockerFixture
 
 from process_dcm.const import ImageModality
-from process_dcm.utils import (
-    delete_if_empty,
-    do_date,
-    get_md5,
-    get_versioned_filename,
-    meta_images,
-    process_and_save_csv,
-    process_dcm,
-    process_dcm_meta,
-    read_csv,
-    set_output_dir,
-    tree,
-    update_modality,
-    write_to_csv,
-)
+from process_dcm.utils import (delete_if_empty, do_date, get_md5,
+                               get_versioned_filename, meta_images,
+                               process_and_save_csv, process_dcm,
+                               process_dcm_meta, read_csv, set_output_dir,
+                               tree, update_modality, write_to_csv)
 from tests.conftest import bottom, create_directory_structure
 
 
@@ -255,6 +245,7 @@ def test_process_and_save_csv_no_changes(csv_data: list[list[str]]) -> None:
 
 
 # skip this test for CI
+@pytest.mark.skip(reason="no 'tests/example_dir'")
 def test_process_dcm(temp_dir: str, input_dir2: Path, mocker: Any) -> None:
     mock_secho = mocker.patch("typer.secho")
     output_dir = Path(temp_dir)
@@ -272,33 +263,33 @@ def test_process_dcm(temp_dir: str, input_dir2: Path, mocker: Any) -> None:
 
 
 def test_process_dcm_dummy(temp_dir: str) -> None:
-    p, s, new_old = process_dcm(input_path=Path("tests/dummy_ex"), output_dir=Path(temp_dir), overwrite=True)
+    p, s, new_old = process_dcm(input_path=Path("tests/dummy_ex"), output_dir=Path(temp_dir), overwrite=True, preserve_folder_structure=False)
     assert new_old == [("2375458543", "123456")]
     assert (
         get_md5(os.path.join(temp_dir, "2375458543__340692_OU_U.DCM", "metadata.json"), bottom)
-        == "a770962058621bd0b4e6e6a5ba5e1e7a"
+        == "f830467715b41a882423c016e40a0da7"
     )
 
 
 def test_process_dcm_dummy_group(temp_dir: str) -> None:
     p, s, new_old = process_dcm(
-        input_path=Path("tests/dummy_ex"), output_dir=Path(temp_dir), overwrite=True, time_group=True
+        input_path=Path("tests/dummy_ex"), output_dir=Path(temp_dir), overwrite=True, time_group=True, preserve_folder_structure=False
     )
     assert new_old == [("2375458543", "123456")]
     assert (
         get_md5(os.path.join(temp_dir, "2375458543__OU_U.DCM", "metadata.json"), bottom)
-        == "a770962058621bd0b4e6e6a5ba5e1e7a"
+        == "f830467715b41a882423c016e40a0da7"
     )
 
 
 def test_process_dcm_dummy_mapping(temp_dir: str) -> None:
     p, s, pair = process_dcm(
-        input_path=Path("tests/dummy_ex"), output_dir=Path(temp_dir), overwrite=True, mapping="tests/map.csv"
+        input_path=Path("tests/dummy_ex"), output_dir=Path(temp_dir), overwrite=True, mapping="tests/map.csv", preserve_folder_structure=False
     )
     assert pair == [("2375458543", "123456")]
     assert (
         get_md5(os.path.join(temp_dir, "2375458543__340692_OU_U.DCM", "metadata.json"), bottom)
-        == "7d60d85ffcf442ccece3948af93873bc"
+        == "20c77ce55beb5ab8c8a0adf3f7be8778"
     )
 
 
